@@ -1,51 +1,138 @@
 # Smart Code Reviewer
 
-A small Next.js prototype for the screening challenge prompt:
+Smart Code Reviewer is a small Next.js prototype for the screening challenge:
 
 > Create an AI assistant that reviews code for readability, structure, and maintainability before human review.
 
-## What It Shows
+The app lets a reviewer paste a short code snippet, choose a language and review focus, and generate structured feedback with:
 
-- A landing page for the prototype concept
-- A sample AI review output with three improvements and one positive note
-- The exact prompt structure behind the assistant
-- A ready-to-submit 100-word summary in [`submission-summary.txt`](./submission-summary.txt)
+- a short summary
+- a maintainability score
+- three suggested improvements
+- one positive note
 
-## Local Run
+## Why this project
+
+This prototype is designed as a practical internal engineering tool rather than a generic demo. The goal is to reduce reviewer fatigue by catching basic readability and maintainability issues before a human code review starts.
+
+It is intentionally lightweight:
+
+- built as a single-page Next.js app
+- uses a Server Action instead of a separate REST endpoint
+- supports live model responses through OpenRouter
+- keeps a simple local fallback path if the model is unavailable
+
+## Features
+
+- Paste a code snippet and run a pre-review
+- Switch between sample snippets for quick demos
+- Choose the review focus: maintainability, readability, or testing
+- Generate structured feedback suitable for engineering teams
+- Use a Server Action for review submission
+- Fall back gracefully when the external model is unavailable
+
+## Tech Stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- OpenRouter for model access
+- Next.js Server Actions for server-side review execution
+
+## Project Structure
+
+```text
+app/
+  actions.ts                     Server Action for running reviews
+  components/
+    review-workbench.tsx         Interactive review UI
+  page.tsx                       Main landing page
+lib/
+  reviewer.ts                    Review types, samples, and fallback analyzer
+  review-state.ts                Client-safe action state definitions
+submission-summary.txt           Ready-to-submit summary text
+```
+
+## How it works
+
+1. The user selects or pastes a short code snippet.
+2. The form submits to a Next.js Server Action.
+3. The Server Action sends the review prompt to OpenRouter.
+4. The model returns structured JSON for the UI.
+5. If the live model fails, the app can still return a fallback local review.
+
+## Environment Variables
+
+Create a `.env` file in the project root:
+
+```bash
+OPENROUTER_API_KEY=your_key_here
+OPENROUTER_MODEL=openrouter/auto
+```
+
+Notes:
+
+- `OPENROUTER_API_KEY` is required for live AI reviews.
+- `OPENROUTER_MODEL` is optional.
+- If the live request fails, the app currently shows an error state instead of exposing provider internals in the UI.
+
+## Local Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
 
 ```bash
 npm run dev
 ```
 
-Then open [http://localhost:3000](http://localhost:3000).
+Open:
 
-## Environment
-
-Create a `.env` file with:
-
-```bash
-OPENROUTER_API_KEY=your_key_here
-OPENROUTER_MODEL=openrouter/auto
-OPENROUTER_SITE_URL=http://localhost:3000
+```text
+http://localhost:3000
 ```
 
-`OPENROUTER_MODEL` and `OPENROUTER_SITE_URL` are optional. If omitted, the app defaults to `openrouter/auto` and `http://localhost:3000`.
+## Quality Checks
 
-## Build Checks
+Run lint:
 
 ```bash
 npm run lint
+```
+
+Run production build:
+
+```bash
 npm run build
 ```
 
-Both pass in the current workspace.
+Both commands pass in the current project state.
 
-## Suggested Submission Assets
+## Submission Notes
 
-- Public link: deploy this repo to Vercel
-- Document: use the contents of `submission-summary.txt`
-- Screenshot: capture the homepage after running `npm run dev`
+This project is suitable for submitting as the Option 1 challenge:
 
-## Data
+> Smart Code Reviewer
 
-This prototype uses self-created sample snippets only, so no public dataset is required.
+Recommended submission assets:
+
+- a public deployment link
+- one or two screenshots of the working interface
+- the summary from `submission-summary.txt`
+
+## Data Usage
+
+This prototype uses self-created sample snippets only. No confidential or private data is required.
+
+## Future Improvements
+
+- Review pull request diffs instead of pasted snippets
+- Add repository-aware review suggestions
+- Support team-specific review policies
+- Add test generation suggestions per framework
+- Add copy/export options for review output
