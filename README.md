@@ -51,7 +51,6 @@ app/
 lib/
   reviewer.ts                    Review types, samples, and fallback analyzer
   review-state.ts                Client-safe action state definitions
-submission-summary.txt           Ready-to-submit summary text
 ```
 
 ## How it works
@@ -112,18 +111,6 @@ npm run build
 ```
 
 Both commands pass in the current project state.
-
-## Submission Notes
-
-This project is suitable for submitting as the Option 1 challenge:
-
-> Smart Code Reviewer
-
-Recommended submission assets:
-
-- a public deployment link
-- one or two screenshots of the working interface
-- the summary from `submission-summary.txt`
 
 ## Data Usage
 
